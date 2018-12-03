@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { HelloRequest } from './helloworld_pb';
+import { TaskRequest } from './helloworld_pb';
 import { GreeterClient } from './helloworld_grpc_web_pb';
 
 const Tasks = ({ index, task, removeTask }) => {
@@ -53,12 +53,13 @@ const Todo = () => {
   );
 
   useEffect(() => {
-    const request = new HelloRequest();
-    request.setName('string');
+    const request = new TaskRequest();
 
-    client.sayHello(request, {}, (err, response) => {
-      const hello = response.getMessage();
-      const newTasks = [...tasks, hello];
+    client.getTasks(request, {}, (err, response) => {
+      let hello = response.getTaskList();
+      const testing = hello.map(temp => temp.array);
+      console.log(testing);
+      const newTasks = [...tasks, ...testing];
       setTasks(newTasks);
     });
   }, []);
@@ -95,18 +96,3 @@ const Todo = () => {
 };
 
 export default Todo;
-
-/**  TYPESCRIPT
- protoc -I=. helloworld.proto \
-  --grpc-web_out=import_style=typescript,mode=grpcwebtext:. 
- */
-
-/** STANDARD
- protoc -I=. helloworld.proto \
-  --js_out=import_style=commonjs:. \
-  --grpc-web_out=import_style=commonjs,mode=grpcwebtext:. 
-
-  
- import { HelloRequest } from './helloworld_pb';
- import { GreeterClient } from './helloworld_grpc_web_pb';
- */

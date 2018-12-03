@@ -1,4 +1,5 @@
 /* eslint-disable */
+
 /**
  * @fileoverview
  * @enhanceable
@@ -14,7 +15,8 @@ var global = Function('return this')();
 
 goog.exportSymbol('proto.helloworld.HelloReply', null, global);
 goog.exportSymbol('proto.helloworld.HelloRequest', null, global);
-goog.exportSymbol('proto.helloworld.TaskReply', null, global);
+goog.exportSymbol('proto.helloworld.Task', null, global);
+goog.exportSymbol('proto.helloworld.TaskList', null, global);
 goog.exportSymbol('proto.helloworld.TaskRequest', null, global);
 
 /**
@@ -418,12 +420,12 @@ proto.helloworld.TaskRequest.serializeBinaryToWriter = function(
  * @extends {jspb.Message}
  * @constructor
  */
-proto.helloworld.TaskReply = function(opt_data) {
+proto.helloworld.Task = function(opt_data) {
   jspb.Message.initialize(this, opt_data, 0, -1, null, null);
 };
-goog.inherits(proto.helloworld.TaskReply, jspb.Message);
+goog.inherits(proto.helloworld.Task, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
-  proto.helloworld.TaskReply.displayName = 'proto.helloworld.TaskReply';
+  proto.helloworld.Task.displayName = 'proto.helloworld.Task';
 }
 
 if (jspb.Message.GENERATE_TO_OBJECT) {
@@ -437,10 +439,8 @@ if (jspb.Message.GENERATE_TO_OBJECT) {
    *     for transitional soy proto support: http://goto/soy-param-migration
    * @return {!Object}
    */
-  proto.helloworld.TaskReply.prototype.toObject = function(
-    opt_includeInstance,
-  ) {
-    return proto.helloworld.TaskReply.toObject(opt_includeInstance, this);
+  proto.helloworld.Task.prototype.toObject = function(opt_includeInstance) {
+    return proto.helloworld.Task.toObject(opt_includeInstance, this);
   };
 
   /**
@@ -448,11 +448,11 @@ if (jspb.Message.GENERATE_TO_OBJECT) {
    * @param {boolean|undefined} includeInstance Whether to include the JSPB
    *     instance for transitional soy proto support:
    *     http://goto/soy-param-migration
-   * @param {!proto.helloworld.TaskReply} msg The msg instance to transform.
+   * @param {!proto.helloworld.Task} msg The msg instance to transform.
    * @return {!Object}
    * @suppress {unusedLocalVariables} f is only used for nested messages
    */
-  proto.helloworld.TaskReply.toObject = function(includeInstance, msg) {
+  proto.helloworld.Task.toObject = function(includeInstance, msg) {
     var f,
       obj = {
         message: jspb.Message.getFieldWithDefault(msg, 1, ''),
@@ -468,22 +468,22 @@ if (jspb.Message.GENERATE_TO_OBJECT) {
 /**
  * Deserializes binary data (in protobuf wire format).
  * @param {jspb.ByteSource} bytes The bytes to deserialize.
- * @return {!proto.helloworld.TaskReply}
+ * @return {!proto.helloworld.Task}
  */
-proto.helloworld.TaskReply.deserializeBinary = function(bytes) {
+proto.helloworld.Task.deserializeBinary = function(bytes) {
   var reader = new jspb.BinaryReader(bytes);
-  var msg = new proto.helloworld.TaskReply();
-  return proto.helloworld.TaskReply.deserializeBinaryFromReader(msg, reader);
+  var msg = new proto.helloworld.Task();
+  return proto.helloworld.Task.deserializeBinaryFromReader(msg, reader);
 };
 
 /**
  * Deserializes binary data (in protobuf wire format) from the
  * given reader into the given message object.
- * @param {!proto.helloworld.TaskReply} msg The message object to deserialize into.
+ * @param {!proto.helloworld.Task} msg The message object to deserialize into.
  * @param {!jspb.BinaryReader} reader The BinaryReader to use.
- * @return {!proto.helloworld.TaskReply}
+ * @return {!proto.helloworld.Task}
  */
-proto.helloworld.TaskReply.deserializeBinaryFromReader = function(msg, reader) {
+proto.helloworld.Task.deserializeBinaryFromReader = function(msg, reader) {
   while (reader.nextField()) {
     if (reader.isEndGroup()) {
       break;
@@ -506,20 +506,20 @@ proto.helloworld.TaskReply.deserializeBinaryFromReader = function(msg, reader) {
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
-proto.helloworld.TaskReply.prototype.serializeBinary = function() {
+proto.helloworld.Task.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  proto.helloworld.TaskReply.serializeBinaryToWriter(this, writer);
+  proto.helloworld.Task.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
 /**
  * Serializes the given message to binary data (in protobuf wire
  * format), writing to the given BinaryWriter.
- * @param {!proto.helloworld.TaskReply} message
+ * @param {!proto.helloworld.Task} message
  * @param {!jspb.BinaryWriter} writer
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.helloworld.TaskReply.serializeBinaryToWriter = function(message, writer) {
+proto.helloworld.Task.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
   f = message.getMessage();
   if (f.length > 0) {
@@ -531,13 +531,191 @@ proto.helloworld.TaskReply.serializeBinaryToWriter = function(message, writer) {
  * optional string message = 1;
  * @return {string}
  */
-proto.helloworld.TaskReply.prototype.getMessage = function() {
+proto.helloworld.Task.prototype.getMessage = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ''));
 };
 
 /** @param {string} value */
-proto.helloworld.TaskReply.prototype.setMessage = function(value) {
+proto.helloworld.Task.prototype.setMessage = function(value) {
   jspb.Message.setProto3StringField(this, 1, value);
+};
+
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.helloworld.TaskList = function(opt_data) {
+  jspb.Message.initialize(
+    this,
+    opt_data,
+    0,
+    -1,
+    proto.helloworld.TaskList.repeatedFields_,
+    null,
+  );
+};
+goog.inherits(proto.helloworld.TaskList, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  proto.helloworld.TaskList.displayName = 'proto.helloworld.TaskList';
+}
+/**
+ * List of repeated fields within this message type.
+ * @private {!Array<number>}
+ * @const
+ */
+proto.helloworld.TaskList.repeatedFields_ = [1];
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+  /**
+   * Creates an object representation of this proto suitable for use in Soy templates.
+   * Field names that are reserved in JavaScript and will be renamed to pb_name.
+   * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+   * For the list of reserved names please see:
+   *     com.google.apps.jspb.JsClassTemplate.JS_RESERVED_WORDS.
+   * @param {boolean=} opt_includeInstance Whether to include the JSPB instance
+   *     for transitional soy proto support: http://goto/soy-param-migration
+   * @return {!Object}
+   */
+  proto.helloworld.TaskList.prototype.toObject = function(opt_includeInstance) {
+    return proto.helloworld.TaskList.toObject(opt_includeInstance, this);
+  };
+
+  /**
+   * Static version of the {@see toObject} method.
+   * @param {boolean|undefined} includeInstance Whether to include the JSPB
+   *     instance for transitional soy proto support:
+   *     http://goto/soy-param-migration
+   * @param {!proto.helloworld.TaskList} msg The msg instance to transform.
+   * @return {!Object}
+   * @suppress {unusedLocalVariables} f is only used for nested messages
+   */
+  proto.helloworld.TaskList.toObject = function(includeInstance, msg) {
+    var f,
+      obj = {
+        taskList: jspb.Message.toObjectList(
+          msg.getTaskList(),
+          proto.helloworld.Task.toObject,
+          includeInstance,
+        ),
+      };
+
+    if (includeInstance) {
+      obj.$jspbMessageInstance = msg;
+    }
+    return obj;
+  };
+}
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.helloworld.TaskList}
+ */
+proto.helloworld.TaskList.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.helloworld.TaskList();
+  return proto.helloworld.TaskList.deserializeBinaryFromReader(msg, reader);
+};
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.helloworld.TaskList} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.helloworld.TaskList}
+ */
+proto.helloworld.TaskList.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+      case 1:
+        var value = new proto.helloworld.Task();
+        reader.readMessage(
+          value,
+          proto.helloworld.Task.deserializeBinaryFromReader,
+        );
+        msg.addTask(value);
+        break;
+      default:
+        reader.skipField();
+        break;
+    }
+  }
+  return msg;
+};
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.helloworld.TaskList.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.helloworld.TaskList.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.helloworld.TaskList} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.helloworld.TaskList.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getTaskList();
+  if (f.length > 0) {
+    writer.writeRepeatedMessage(
+      1,
+      f,
+      proto.helloworld.Task.serializeBinaryToWriter,
+    );
+  }
+};
+
+/**
+ * repeated Task task = 1;
+ * @return {!Array<!proto.helloworld.Task>}
+ */
+proto.helloworld.TaskList.prototype.getTaskList = function() {
+  return /** @type{!Array<!proto.helloworld.Task>} */ (jspb.Message.getRepeatedWrapperField(
+    this,
+    proto.helloworld.Task,
+    1,
+  ));
+};
+
+/** @param {!Array<!proto.helloworld.Task>} value */
+proto.helloworld.TaskList.prototype.setTaskList = function(value) {
+  jspb.Message.setRepeatedWrapperField(this, 1, value);
+};
+
+/**
+ * @param {!proto.helloworld.Task=} opt_value
+ * @param {number=} opt_index
+ * @return {!proto.helloworld.Task}
+ */
+proto.helloworld.TaskList.prototype.addTask = function(opt_value, opt_index) {
+  return jspb.Message.addToRepeatedWrapperField(
+    this,
+    1,
+    opt_value,
+    proto.helloworld.Task,
+    opt_index,
+  );
+};
+
+proto.helloworld.TaskList.prototype.clearTaskList = function() {
+  this.setTaskList([]);
 };
 
 goog.object.extend(exports, proto.helloworld);

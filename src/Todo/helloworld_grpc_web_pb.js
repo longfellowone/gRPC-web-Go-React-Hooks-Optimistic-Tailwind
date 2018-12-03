@@ -132,15 +132,15 @@ proto.helloworld.GreeterPromiseClient.prototype.sayHello =
  * @const
  * @type {!grpc.web.AbstractClientBase.MethodInfo<
  *   !proto.helloworld.TaskRequest,
- *   !proto.helloworld.TaskReply>}
+ *   !proto.helloworld.TaskList>}
  */
 const methodInfo_Greeter_GetTasks = new grpc.web.AbstractClientBase.MethodInfo(
-  proto.helloworld.TaskReply,
+  proto.helloworld.TaskList,
   /** @param {!proto.helloworld.TaskRequest} request */
   function(request) {
     return request.serializeBinary();
   },
-  proto.helloworld.TaskReply.deserializeBinary
+  proto.helloworld.TaskList.deserializeBinary
 );
 
 
@@ -149,9 +149,9 @@ const methodInfo_Greeter_GetTasks = new grpc.web.AbstractClientBase.MethodInfo(
  *     request proto
  * @param {!Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.Error, ?proto.helloworld.TaskReply)}
+ * @param {function(?grpc.web.Error, ?proto.helloworld.TaskList)}
  *     callback The callback function(error, response)
- * @return {!grpc.web.ClientReadableStream<!proto.helloworld.TaskReply>|undefined}
+ * @return {!grpc.web.ClientReadableStream<!proto.helloworld.TaskList>|undefined}
  *     The XHR Node Readable Stream
  */
 proto.helloworld.GreeterClient.prototype.getTasks =
@@ -170,7 +170,7 @@ proto.helloworld.GreeterClient.prototype.getTasks =
  *     request proto
  * @param {!Object<string, string>} metadata User defined
  *     call metadata
- * @return {!Promise<!proto.helloworld.TaskReply>}
+ * @return {!Promise<!proto.helloworld.TaskList>}
  *     The XHR Node Readable Stream
  */
 proto.helloworld.GreeterPromiseClient.prototype.getTasks =

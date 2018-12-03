@@ -22,7 +22,7 @@ package helloworld;
 service Greeter {
   // Sends a greeting
   rpc SayHello (HelloRequest) returns (HelloReply) {}
-  rpc GetTasks (TaskRequest) returns (TaskReply) {}
+  rpc GetTasks (TaskRequest) returns (TaskList) {}
 }
 
 // The request message containing the user's name.
@@ -40,6 +40,17 @@ message HelloReply {
 message TaskRequest {}
 
 // The response message containing the greetings
-message TaskReply {
+message Task {
   string message = 1;
 }
+
+message TaskList {
+  repeated Task task = 1;
+}
+
+
+/** STANDARD
+ protoc -I=. helloworld.proto \
+  --js_out=import_style=commonjs:. \
+  --grpc-web_out=import_style=commonjs,mode=grpcwebtext:. 
+ */
