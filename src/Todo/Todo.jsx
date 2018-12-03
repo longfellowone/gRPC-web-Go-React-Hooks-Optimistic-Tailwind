@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { HelloRequest } from './helloworld_pb';
+import { GreeterClient } from './helloworld_grpc_web_pb';
 
 const Tasks = ({ index, task, removeTask }) => {
   return (
@@ -42,7 +44,24 @@ const TodoForm = ({ addTask }) => {
 };
 
 const Todo = () => {
-  const [tasks, setTasks] = useState(['text', 'text2', 'text3']);
+  const [tasks, setTasks] = useState([]);
+
+  const client = new GreeterClient(
+    'http://' + window.location.hostname + ':8080',
+    null,
+    null,
+  );
+
+  useEffect(() => {
+    const request = new HelloRequest();
+    request.setName('string');
+
+    client.sayHello(request, {}, (err, response) => {
+      const hello = response.getMessage();
+      const newTasks = [...tasks, hello];
+      setTasks(newTasks);
+    });
+  }, []);
 
   const addTask = input => {
     const newTasks = [...tasks, input];
@@ -76,3 +95,18 @@ const Todo = () => {
 };
 
 export default Todo;
+
+/**  TYPESCRIPT
+ protoc -I=. helloworld.proto \
+  --grpc-web_out=import_style=typescript,mode=grpcwebtext:. 
+ */
+
+/** STANDARD
+ protoc -I=. helloworld.proto \
+  --js_out=import_style=commonjs:. \
+  --grpc-web_out=import_style=commonjs,mode=grpcwebtext:. 
+
+  
+ import { HelloRequest } from './helloworld_pb';
+ import { GreeterClient } from './helloworld_grpc_web_pb';
+ */
