@@ -6,7 +6,7 @@ const Tasks = ({ index, task, removeTask }) => {
   return (
     <>
       <li className="flex justify-between bg-grey-light mb-2 rounded">
-        <div className="p-2">{task}</div>
+        <div className="p-2">{task.message}</div>
         <div>
           <button
             className="bg-red text-white p-2 rounded-tr rounded-br"
@@ -26,7 +26,7 @@ const TodoForm = ({ addTask }) => {
   const handleSumbit = e => {
     e.preventDefault();
     if (!input) return;
-    addTask(input);
+    addTask(9, input);
     setInput('');
     return;
   };
@@ -56,25 +56,19 @@ const Todo = () => {
     const request = new TaskRequest();
 
     client.listTasks(request, {}, (err, response) => {
-      const test = response.toObject()
-      const testing = test.tasksList.map(value => value.message);
-      console.log(testing)
-      //const tested = response.map(value => value.message);
-      //console.log(tested)
-
-
-      // if (err) {
-      //   return console.log(err);
-      // }
-      // let hello = response.getTaskList();
-      // const testing = hello.map(temp => temp.array);
+      if (err) {
+        return console.log(err);
+      }
+      const test = response.toObject();
+      console.log(test);
+      const testing = test.tasksList.map(value => value);
       const newTasks = [...tasks, ...testing];
       setTasks(newTasks);
     });
   }, []);
 
-  const addTask = input => {
-    const newTasks = [...tasks, input];
+  const addTask = (id, message) => {
+    const newTasks = [...tasks, { id, message }];
     setTasks(newTasks);
     return;
   };
@@ -87,11 +81,11 @@ const Todo = () => {
 
   return (
     <div className="max-w-sm mx-auto">
-      <div className="p-2 m-2 bg-grey rounded">
+      <div className="p-2 my-2 bg-grey rounded">
         <ul className="list-reset">
           {tasks.map((task, index) => (
             <Tasks
-              key={index}
+              key={task.id}
               index={index}
               task={task}
               removeTask={removeTask}
@@ -105,3 +99,70 @@ const Todo = () => {
 };
 
 export default Todo;
+
+// const [tasks, setTasks] = useState([
+// {
+//   id: 3,
+//   message: "another one"
+// },
+// {
+//   id:4,
+//   message: "another 4"
+// }
+// ]);
+
+//const tested = response.map(value => value.message);
+//console.log(tested)
+// let hello = response.getTaskList();
+// const testing = hello.map(temp => temp.array);
+
+// const data = [
+//   {
+//     name: "John Doe",
+//     position: "developer",
+//     experiences: [
+//       {
+//         id: 0,
+//         job: "developer 1",
+//         period: "2016-2017",
+//         description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium nesciunt recusandae unde. Qui consequatur beatae, aspernatur placeat sapiente non est!"
+//       },
+//       {
+//         id: 1,
+//         job: "developer 2",
+//         period: "2015-2016",
+//         description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium nesciunt recusandae unde. Qui consequatur beatae, aspernatur placeat sapiente non est!"
+//       },
+//       {
+//         id: 2,
+//         job: "developer 3",
+//         period: "2014-2015",
+//         description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium nesciunt recusandae unde. Qui consequatur beatae, aspernatur placeat sapiente non est!"
+//       }
+
+//     ]
+
+//   }
+// ]
+
+// class App extends React.Component {
+//   render() {
+//     const { data } = this.props;
+//     const resume = data.map(info => {
+//       //browser render
+//       return (
+//         <div>
+//           {info.name}
+//           <ul>
+//           {
+//             info.experiences.map(experience => <li key={experience.id}>{experience.job}</li>)
+//           }
+//           </ul>
+//           {info.position}
+//         </div>
+//       );
+//     });
+
+//     return <div>{<p>{resume}</p>}</div>;
+//   }
+// }

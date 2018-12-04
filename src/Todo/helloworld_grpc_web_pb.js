@@ -75,12 +75,12 @@ proto.helloworld.GreeterPromiseClient =
 /**
  * @const
  * @type {!grpc.web.AbstractClientBase.MethodInfo<
- *   !proto.helloworld.TaskRequest,
+ *   !proto.helloworld.Empty,
  *   !proto.helloworld.TaskResponse>}
  */
 const methodInfo_Greeter_ListTasks = new grpc.web.AbstractClientBase.MethodInfo(
   proto.helloworld.TaskResponse,
-  /** @param {!proto.helloworld.TaskRequest} request */
+  /** @param {!proto.helloworld.Empty} request */
   function(request) {
     return request.serializeBinary();
   },
@@ -89,7 +89,7 @@ const methodInfo_Greeter_ListTasks = new grpc.web.AbstractClientBase.MethodInfo(
 
 
 /**
- * @param {!proto.helloworld.TaskRequest} request The
+ * @param {!proto.helloworld.Empty} request The
  *     request proto
  * @param {!Object<string, string>} metadata User defined
  *     call metadata
@@ -110,7 +110,7 @@ proto.helloworld.GreeterClient.prototype.listTasks =
 
 
 /**
- * @param {!proto.helloworld.TaskRequest} request The
+ * @param {!proto.helloworld.Empty} request The
  *     request proto
  * @param {!Object<string, string>} metadata User defined
  *     call metadata
