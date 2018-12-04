@@ -55,12 +55,19 @@ const Todo = () => {
   useEffect(() => {
     const request = new TaskRequest();
 
-    client.getTasks(request, {}, (err, response) => {
-      if (err) {
-        return console.log(err);
-      }
-      let hello = response.getTaskList();
-      const testing = hello.map(temp => temp.array);
+    client.listTasks(request, {}, (err, response) => {
+      const test = response.toObject()
+      const testing = test.tasksList.map(value => value.message);
+      console.log(testing)
+      //const tested = response.map(value => value.message);
+      //console.log(tested)
+
+
+      // if (err) {
+      //   return console.log(err);
+      // }
+      // let hello = response.getTaskList();
+      // const testing = hello.map(temp => temp.array);
       const newTasks = [...tasks, ...testing];
       setTasks(newTasks);
     });

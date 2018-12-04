@@ -75,72 +75,16 @@ proto.helloworld.GreeterPromiseClient =
 /**
  * @const
  * @type {!grpc.web.AbstractClientBase.MethodInfo<
- *   !proto.helloworld.HelloRequest,
- *   !proto.helloworld.HelloReply>}
- */
-const methodInfo_Greeter_SayHello = new grpc.web.AbstractClientBase.MethodInfo(
-  proto.helloworld.HelloReply,
-  /** @param {!proto.helloworld.HelloRequest} request */
-  function(request) {
-    return request.serializeBinary();
-  },
-  proto.helloworld.HelloReply.deserializeBinary
-);
-
-
-/**
- * @param {!proto.helloworld.HelloRequest} request The
- *     request proto
- * @param {!Object<string, string>} metadata User defined
- *     call metadata
- * @param {function(?grpc.web.Error, ?proto.helloworld.HelloReply)}
- *     callback The callback function(error, response)
- * @return {!grpc.web.ClientReadableStream<!proto.helloworld.HelloReply>|undefined}
- *     The XHR Node Readable Stream
- */
-proto.helloworld.GreeterClient.prototype.sayHello =
-    function(request, metadata, callback) {
-  return this.client_.rpcCall(this.hostname_ +
-      '/helloworld.Greeter/SayHello',
-      request,
-      metadata,
-      methodInfo_Greeter_SayHello,
-      callback);
-};
-
-
-/**
- * @param {!proto.helloworld.HelloRequest} request The
- *     request proto
- * @param {!Object<string, string>} metadata User defined
- *     call metadata
- * @return {!Promise<!proto.helloworld.HelloReply>}
- *     The XHR Node Readable Stream
- */
-proto.helloworld.GreeterPromiseClient.prototype.sayHello =
-    function(request, metadata) {
-  return new Promise((resolve, reject) => {
-    this.delegateClient_.sayHello(
-      request, metadata, (error, response) => {
-        error ? reject(error) : resolve(response);
-      });
-  });
-};
-
-
-/**
- * @const
- * @type {!grpc.web.AbstractClientBase.MethodInfo<
  *   !proto.helloworld.TaskRequest,
- *   !proto.helloworld.TaskList>}
+ *   !proto.helloworld.TaskResponse>}
  */
-const methodInfo_Greeter_GetTasks = new grpc.web.AbstractClientBase.MethodInfo(
-  proto.helloworld.TaskList,
+const methodInfo_Greeter_ListTasks = new grpc.web.AbstractClientBase.MethodInfo(
+  proto.helloworld.TaskResponse,
   /** @param {!proto.helloworld.TaskRequest} request */
   function(request) {
     return request.serializeBinary();
   },
-  proto.helloworld.TaskList.deserializeBinary
+  proto.helloworld.TaskResponse.deserializeBinary
 );
 
 
@@ -149,18 +93,18 @@ const methodInfo_Greeter_GetTasks = new grpc.web.AbstractClientBase.MethodInfo(
  *     request proto
  * @param {!Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.Error, ?proto.helloworld.TaskList)}
+ * @param {function(?grpc.web.Error, ?proto.helloworld.TaskResponse)}
  *     callback The callback function(error, response)
- * @return {!grpc.web.ClientReadableStream<!proto.helloworld.TaskList>|undefined}
+ * @return {!grpc.web.ClientReadableStream<!proto.helloworld.TaskResponse>|undefined}
  *     The XHR Node Readable Stream
  */
-proto.helloworld.GreeterClient.prototype.getTasks =
+proto.helloworld.GreeterClient.prototype.listTasks =
     function(request, metadata, callback) {
   return this.client_.rpcCall(this.hostname_ +
-      '/helloworld.Greeter/GetTasks',
+      '/helloworld.Greeter/ListTasks',
       request,
       metadata,
-      methodInfo_Greeter_GetTasks,
+      methodInfo_Greeter_ListTasks,
       callback);
 };
 
@@ -170,13 +114,13 @@ proto.helloworld.GreeterClient.prototype.getTasks =
  *     request proto
  * @param {!Object<string, string>} metadata User defined
  *     call metadata
- * @return {!Promise<!proto.helloworld.TaskList>}
+ * @return {!Promise<!proto.helloworld.TaskResponse>}
  *     The XHR Node Readable Stream
  */
-proto.helloworld.GreeterPromiseClient.prototype.getTasks =
+proto.helloworld.GreeterPromiseClient.prototype.listTasks =
     function(request, metadata) {
   return new Promise((resolve, reject) => {
-    this.delegateClient_.getTasks(
+    this.delegateClient_.listTasks(
       request, metadata, (error, response) => {
         error ? reject(error) : resolve(response);
       });

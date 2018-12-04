@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.\
 
-/* eslint-disable */
-
 syntax = "proto3";
 
 package helloworld;
@@ -21,36 +19,32 @@ package helloworld;
 // The greeting service definition.
 service Greeter {
   // Sends a greeting
-  rpc SayHello (HelloRequest) returns (HelloReply) {}
-  rpc GetTasks (TaskRequest) returns (TaskList) {}
+  rpc ListTasks (TaskRequest) returns (TaskResponse) {}
 }
 
-// The request message containing the user's name.
-message HelloRequest {
-  string name = 1;
-}
 
-// The response message containing the greetings
-message HelloReply {
-  string message = 1;
-}
 
+message Task {
+  int64 id = 1;
+  string message = 2;
+}
 
 // The request message containing the user's name.
 message TaskRequest {}
 
 // The response message containing the greetings
-message Task {
-  string message = 1;
+
+message TaskResponse {
+  repeated Task tasks = 1;
 }
 
-message TaskList {
-  repeated Task task = 1;
-}
 
+
+
+/* eslint-disable */
 
 /** STANDARD
  protoc -I=. helloworld.proto \
   --js_out=import_style=commonjs:. \
-  --grpc-web_out=import_style=commonjs,mode=grpcwebtext:. 
+  --grpc-web_out=import_style=commonjs,mode=grpcwebtext:.
  */
