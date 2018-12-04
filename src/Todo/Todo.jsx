@@ -56,9 +56,11 @@ const Todo = () => {
     const request = new TaskRequest();
 
     client.getTasks(request, {}, (err, response) => {
+      if (err) {
+        return console.log(err);
+      }
       let hello = response.getTaskList();
       const testing = hello.map(temp => temp.array);
-      console.log(testing);
       const newTasks = [...tasks, ...testing];
       setTasks(newTasks);
     });
