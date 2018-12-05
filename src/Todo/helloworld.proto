@@ -4,21 +4,26 @@ package helloworld;
 
 service Greeter {
   rpc ListTasks (Empty) returns (TaskResponse) {}
+  rpc NewTask (Task) returns (NewTaskResponse) {}
 }
 
 message Empty {}
 
 message Task {
-  int64 id = 1;
+  string uuid = 1;
   string message = 2;
 }
-
-message TaskRequest {}
 
 message TaskResponse {
   repeated Task tasks = 1;
 }
 
+message NewTaskResponse {
+  bool success = 1;
+}
+
+
+// UUID use string
 
 /* eslint-disable */
 

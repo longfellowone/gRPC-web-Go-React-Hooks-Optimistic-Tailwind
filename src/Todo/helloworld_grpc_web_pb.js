@@ -128,5 +128,61 @@ proto.helloworld.GreeterPromiseClient.prototype.listTasks =
 };
 
 
+/**
+ * @const
+ * @type {!grpc.web.AbstractClientBase.MethodInfo<
+ *   !proto.helloworld.Task,
+ *   !proto.helloworld.NewTaskResponse>}
+ */
+const methodInfo_Greeter_NewTask = new grpc.web.AbstractClientBase.MethodInfo(
+  proto.helloworld.NewTaskResponse,
+  /** @param {!proto.helloworld.Task} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.helloworld.NewTaskResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.helloworld.Task} request The
+ *     request proto
+ * @param {!Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.Error, ?proto.helloworld.NewTaskResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.helloworld.NewTaskResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.helloworld.GreeterClient.prototype.newTask =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/helloworld.Greeter/NewTask',
+      request,
+      metadata,
+      methodInfo_Greeter_NewTask,
+      callback);
+};
+
+
+/**
+ * @param {!proto.helloworld.Task} request The
+ *     request proto
+ * @param {!Object<string, string>} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.helloworld.NewTaskResponse>}
+ *     The XHR Node Readable Stream
+ */
+proto.helloworld.GreeterPromiseClient.prototype.newTask =
+    function(request, metadata) {
+  return new Promise((resolve, reject) => {
+    this.delegateClient_.newTask(
+      request, metadata, (error, response) => {
+        error ? reject(error) : resolve(response);
+      });
+  });
+};
+
+
 module.exports = proto.helloworld;
 
