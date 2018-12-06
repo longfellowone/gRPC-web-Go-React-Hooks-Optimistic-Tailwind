@@ -5,13 +5,7 @@ import { v4 as uuid } from 'uuid';
 
 const Tasks = ({ index, task, removeTask }) => {
   return (
-    <li
-      className={
-        task.error
-          ? 'flex justify-between bg-grey-light mb-2 rounded text-grey-dark'
-          : 'flex justify-between bg-grey-light mb-2 rounded'
-      }
-    >
+    <li className="flex justify-between bg-grey-light mb-2 rounded">
       <div className="p-2">{task.message}</div>
       <div>
         <button
@@ -50,6 +44,7 @@ const TodoForm = ({ addTask }) => {
 
 const Todo = () => {
   const [tasks, setTasks] = useState([]);
+  const [error, setError] = useState(false);
 
   const client = new GreeterClient(
     'http://' + window.location.hostname + ':8080',
@@ -62,6 +57,7 @@ const Todo = () => {
 
     client.listTasks(request, {}, (err, response) => {
       if (err) {
+        setError(true);
         return console.log(err);
       }
       const test = response.toObject();
@@ -79,15 +75,18 @@ const Todo = () => {
 
     client.newTask(request2, {}, (err, response) => {
       if (err) {
-        const newTask = [
-          ...tasks.filter(task => task.uuid !== uuid),
-          { error: true, message: message, uuid: uuid },
-        ];
+        const newTask = tasks.filter(task => task.uuid !== uuid);
         setTasks(newTask);
+
+        setError(true);
+        console.log(err);
         return;
       }
     });
 
+    if (error) {
+      setError(false);
+    }
     const newTask = [...tasks, { uuid, message }];
     setTasks(newTask);
   };
@@ -97,8 +96,6 @@ const Todo = () => {
     newTasks.splice(index, 1);
     setTasks(newTasks);
   };
-
-  //console.log(tasks);
 
   return (
     <div className="max-w-sm mx-auto">
@@ -114,6 +111,9 @@ const Todo = () => {
           ))}
         </ul>
         <TodoForm addTask={addTask} />
+        {error && (
+          <div className="mt-3 px-1">Error: Can't connect to database</div>
+        )}
       </div>
     </div>
   );
@@ -186,4 +186,10 @@ export default Todo;
 
 //     return <div>{<p>{resume}</p>}</div>;
 //   }
+// }
+
+// {
+//   task.error
+//     ? 'flex justify-between bg-grey-light mb-2 rounded text-grey-dark'
+//     : 'flex justify-between bg-grey-light mb-2 rounded'
 // }
