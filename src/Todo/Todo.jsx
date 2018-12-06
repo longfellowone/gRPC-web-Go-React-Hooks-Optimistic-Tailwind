@@ -7,7 +7,7 @@ const Tasks = ({ index, task, removeTask }) => {
   return (
     <li
       className={
-        task.saving
+        task.error
           ? 'flex justify-between bg-grey-light mb-2 rounded text-grey-dark'
           : 'flex justify-between bg-grey-light mb-2 rounded'
       }
@@ -66,33 +66,30 @@ const Todo = () => {
       }
       const test = response.toObject();
       const testing = test.tasksList.map(value => value);
+
       const newTasks = [...tasks, ...testing];
       setTasks(newTasks);
     });
   }, []);
 
   const addTask = (uuid, message) => {
-    let saving = true;
-    const newTasks = [...tasks, { uuid, message, saving }];
-    setTasks(newTasks);
-
     const request2 = new Task();
     request2.setUuid(uuid);
     request2.setMessage(message);
 
     client.newTask(request2, {}, (err, response) => {
       if (err) {
-        return console.log('Not added'); // err
-      }
-      console.log(response);
-      if (response.getSuccess()) {
-        let newTasks = tasks.filter(word => word.uuid !== uuid);
-        newTasks = [...tasks, { uuid, message }];
-        setTasks(newTasks);
+        const newTask = [
+          ...tasks.filter(task => task.uuid !== uuid),
+          { error: true, message: message, uuid: uuid },
+        ];
+        setTasks(newTask);
+        return;
       }
     });
 
-    return;
+    const newTask = [...tasks, { uuid, message }];
+    setTasks(newTask);
   };
 
   const removeTask = index => {
@@ -101,7 +98,7 @@ const Todo = () => {
     setTasks(newTasks);
   };
 
-  console.log(tasks);
+  //console.log(tasks);
 
   return (
     <div className="max-w-sm mx-auto">
