@@ -5,30 +5,33 @@ import { v4 as uuid } from 'uuid';
 
 const Tasks = ({ index, task, removeTask }) => {
   return (
-    <li className="flex justify-between bg-grey-light mb-2 rounded">
-      <div className="p-2">
-        {task.message}
-        {task.pending && '...Pending'}
-      </div>
+    <li
+      className={
+        task.pending
+          ? 'flex justify-between bg-grey-light mb-2 rounded text-grey-dark'
+          : 'flex justify-between bg-grey-light mb-2 rounded'
+      }
+    >
+      <div className="p-2">{task.message}</div>
       <div>
         <button
-          className="bg-red text-white p-2 rounded-tr rounded-br"
+          className="bg-red text-white p-2 px-3 rounded-tr rounded-br"
           onClick={() => removeTask(index)}
         >
-          Delete
+          X
         </button>
       </div>
     </li>
   );
 };
 
-const TodoForm = ({ addTaskOptimistic }) => {
+const TodoForm = ({ addTask }) => {
   const [input, setInput] = useState('');
 
   const handleSumbit = e => {
     e.preventDefault();
     if (!input) return;
-    addTaskOptimistic(uuid(), input);
+    addTask(uuid(), input);
     setInput('');
     return;
   };
@@ -71,43 +74,34 @@ const Todo = () => {
     });
   }, []);
 
-  const addTaskOptimistic = (uuid, message) => {
+  const addTask = (uuid, message) => {
+    const request = new Task();
+    request.setUuid(uuid);
+    request.setMessage(message);
+
+    if (error) {
+      setError(false);
+    }
+    let date = new Date().getTime() / 1000;
     let pending = true;
-    const newTask = [...tasks, { uuid, message, pending }];
+    const newTask = [...tasks, { uuid, message, pending, date }];
     setTasks(newTask);
 
-    addTask(uuid, message).then(() => {
-      let pending = null;
-      setTasks(prevTasks => {
-        const newTasks = prevTasks.filter(task => task.uuid !== uuid);
-        return [...newTasks, { uuid, message, pending }];
+    client.newTask(request, {}, err => {
+      pending = false;
+      setTasks(currentTasks => {
+        const newTasks = currentTasks.filter(task => task.uuid !== uuid);
+        return [...newTasks, { uuid, message, pending, date }];
       });
+
+      if (err) {
+        const removedTask = tasks.filter(task => task.uuid !== uuid);
+        setTasks(removedTask);
+        setError(true);
+        console.log(err);
+      }
     });
   };
-
-  function addTask(uuid, message) {
-    return new Promise((resolve, reject) => {
-      setTimeout(resolve, 2000);
-    });
-
-    // const request = new Task();
-    // request.setUuid(uuid);
-    // request.setMessage(message);
-
-    // client.newTask(request, {}, (err, response) => {
-    //   if (err) {
-    //     const newTask = tasks.filter(task => task.uuid !== uuid);
-    //     setTasks(newTask);
-    //     setError(true);
-    //     console.log(err);
-    //   }
-    //   console.log('success');
-    // });
-
-    // if (error) {
-    //   setError(false);
-    // }
-  }
 
   const removeTask = index => {
     const newTasks = [...tasks];
@@ -115,11 +109,18 @@ const Todo = () => {
     setTasks(newTasks);
   };
 
+  console.log(tasks);
+
+  const sortedTasks = [].concat(tasks).sort((a, b) => {
+    //return new Date(a.date) - new Date(b.date);
+    return a.date - b.date;
+  });
+
   return (
     <div className="max-w-sm mx-auto">
       <div className="p-2 my-2 bg-grey rounded">
         <ul className="list-reset">
-          {tasks.map((task, index) => (
+          {sortedTasks.map((task, index) => (
             <Tasks
               key={task.uuid}
               index={index}
@@ -128,7 +129,7 @@ const Todo = () => {
             />
           ))}
         </ul>
-        <TodoForm addTaskOptimistic={addTaskOptimistic} />
+        <TodoForm addTask={addTask} />
         {error && (
           <div className="mt-3 px-1">Error: Can't connect to database</div>
         )}
