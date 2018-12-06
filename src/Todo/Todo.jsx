@@ -6,7 +6,10 @@ import { v4 as uuid } from 'uuid';
 const Tasks = ({ index, task, removeTask }) => {
   return (
     <li className="flex justify-between bg-grey-light mb-2 rounded">
-      <div className="p-2">{task.message}</div>
+      <div className="p-2">
+        {task.message}
+        {task.pending && '...Pending'}
+      </div>
       <div>
         <button
           className="bg-red text-white p-2 rounded-tr rounded-br"
@@ -19,13 +22,13 @@ const Tasks = ({ index, task, removeTask }) => {
   );
 };
 
-const TodoForm = ({ addTask }) => {
+const TodoForm = ({ addTaskOptimistic }) => {
   const [input, setInput] = useState('');
 
   const handleSumbit = e => {
     e.preventDefault();
     if (!input) return;
-    addTask(uuid(), input);
+    addTaskOptimistic(uuid(), input);
     setInput('');
     return;
   };
@@ -68,26 +71,43 @@ const Todo = () => {
     });
   }, []);
 
-  const addTask = (uuid, message) => {
-    const request2 = new Task();
-    request2.setUuid(uuid);
-    request2.setMessage(message);
-
-    if (error) {
-      setError(false);
-    }
-    const newTask = [...tasks, { uuid, message }];
+  const addTaskOptimistic = (uuid, message) => {
+    let pending = true;
+    const newTask = [...tasks, { uuid, message, pending }];
     setTasks(newTask);
 
-    client.newTask(request2, {}, (err, response) => {
-      if (err) {
-        const newTask = tasks.filter(task => task.uuid !== uuid);
-        setTasks(newTask);
-        setError(true);
-        console.log(err);
-      }
+    addTask(uuid, message).then(() => {
+      let pending = null;
+      setTasks(prevTasks => {
+        const newTasks = prevTasks.filter(task => task.uuid !== uuid);
+        return [...newTasks, { uuid, message, pending }];
+      });
     });
   };
+
+  function addTask(uuid, message) {
+    return new Promise((resolve, reject) => {
+      setTimeout(resolve, 2000);
+    });
+
+    // const request = new Task();
+    // request.setUuid(uuid);
+    // request.setMessage(message);
+
+    // client.newTask(request, {}, (err, response) => {
+    //   if (err) {
+    //     const newTask = tasks.filter(task => task.uuid !== uuid);
+    //     setTasks(newTask);
+    //     setError(true);
+    //     console.log(err);
+    //   }
+    //   console.log('success');
+    // });
+
+    // if (error) {
+    //   setError(false);
+    // }
+  }
 
   const removeTask = index => {
     const newTasks = [...tasks];
@@ -108,7 +128,7 @@ const Todo = () => {
             />
           ))}
         </ul>
-        <TodoForm addTask={addTask} />
+        <TodoForm addTaskOptimistic={addTaskOptimistic} />
         {error && (
           <div className="mt-3 px-1">Error: Can't connect to database</div>
         )}
