@@ -73,22 +73,20 @@ const Todo = () => {
     request2.setUuid(uuid);
     request2.setMessage(message);
 
-    client.newTask(request2, {}, (err, response) => {
-      if (err) {
-        const newTask = tasks.filter(task => task.uuid !== uuid);
-        setTasks(newTask);
-
-        setError(true);
-        console.log(err);
-        return;
-      }
-    });
-
     if (error) {
       setError(false);
     }
     const newTask = [...tasks, { uuid, message }];
     setTasks(newTask);
+
+    client.newTask(request2, {}, (err, response) => {
+      if (err) {
+        const newTask = tasks.filter(task => task.uuid !== uuid);
+        setTasks(newTask);
+        setError(true);
+        console.log(err);
+      }
+    });
   };
 
   const removeTask = index => {
