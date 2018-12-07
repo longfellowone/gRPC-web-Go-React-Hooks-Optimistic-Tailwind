@@ -66,39 +66,43 @@ const Todo = () => {
         setError(true);
         return console.log(err);
       }
-      const test = response.toObject();
-      const testing = test.tasksList.map(value => value);
 
-      const newTasks = [...tasks, ...testing];
-      setTasks(newTasks);
+      response = response.toObject().tasksList.map(task => task);
+      const savedTasks = [...tasks, ...response];
+      setTasks(savedTasks);
     });
   }, []);
 
   const addTask = (uuid, message) => {
+    if (error) {
+      setError(false);
+    }
+    const time = new Date().getTime() / 1000;
+
+    const newTasks = [...tasks, { uuid, message, time, pending: true }];
+    setTasks(newTasks);
+
     const request = new Task();
     request.setUuid(uuid);
     request.setMessage(message);
 
-    if (error) {
-      setError(false);
-    }
-    let date = new Date().getTime() / 1000;
-    let pending = true;
-    const newTask = [...tasks, { uuid, message, pending, date }];
-    setTasks(newTask);
-
     client.newTask(request, {}, err => {
-      pending = false;
-      setTasks(currentTasks => {
-        const newTasks = currentTasks.filter(task => task.uuid !== uuid);
-        return [...newTasks, { uuid, message, pending, date }];
-      });
+      setTasks(currentTasks =>
+        currentTasks.map(task => {
+          if (task.uuid === uuid) {
+            delete task.pending;
+          }
+          return task;
+        }),
+      );
 
       if (err) {
-        const removedTask = tasks.filter(task => task.uuid !== uuid);
-        setTasks(removedTask);
         setError(true);
         console.log(err);
+
+        setTasks(currentTasks =>
+          currentTasks.filter(task => task.uuid !== uuid),
+        );
       }
     });
   };
@@ -109,11 +113,8 @@ const Todo = () => {
     setTasks(newTasks);
   };
 
-  console.log(tasks);
-
   const sortedTasks = [].concat(tasks).sort((a, b) => {
-    //return new Date(a.date) - new Date(b.date);
-    return a.date - b.date;
+    return a.time - b.time;
   });
 
   return (
@@ -139,76 +140,3 @@ const Todo = () => {
 };
 
 export default Todo;
-
-// const [tasks, setTasks] = useState([
-// {
-//   id: 3,
-//   message: "another one"
-// },
-// {
-//   id:4,
-//   message: "another 4"
-// }
-// ]);
-
-//const tested = response.map(value => value.message);
-//console.log(tested)
-// let hello = response.getTaskList();
-// const testing = hello.map(temp => temp.array);
-
-// const data = [
-//   {
-//     name: "John Doe",
-//     position: "developer",
-//     experiences: [
-//       {
-//         id: 0,
-//         job: "developer 1",
-//         period: "2016-2017",
-//         description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium nesciunt recusandae unde. Qui consequatur beatae, aspernatur placeat sapiente non est!"
-//       },
-//       {
-//         id: 1,
-//         job: "developer 2",
-//         period: "2015-2016",
-//         description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium nesciunt recusandae unde. Qui consequatur beatae, aspernatur placeat sapiente non est!"
-//       },
-//       {
-//         id: 2,
-//         job: "developer 3",
-//         period: "2014-2015",
-//         description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium nesciunt recusandae unde. Qui consequatur beatae, aspernatur placeat sapiente non est!"
-//       }
-
-//     ]
-
-//   }
-// ]
-
-// class App extends React.Component {
-//   render() {
-//     const { data } = this.props;
-//     const resume = data.map(info => {
-//       //browser render
-//       return (
-//         <div>
-//           {info.name}
-//           <ul>
-//           {
-//             info.experiences.map(experience => <li key={experience.id}>{experience.job}</li>)
-//           }
-//           </ul>
-//           {info.position}
-//         </div>
-//       );
-//     });
-
-//     return <div>{<p>{resume}</p>}</div>;
-//   }
-// }
-
-// {
-//   task.error
-//     ? 'flex justify-between bg-grey-light mb-2 rounded text-grey-dark'
-//     : 'flex justify-between bg-grey-light mb-2 rounded'
-// }
