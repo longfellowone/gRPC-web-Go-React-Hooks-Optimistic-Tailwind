@@ -110,8 +110,6 @@ const Todo = () => {
     setTasks(currentTasks => currentTasks.filter(task => task.uuid !== uuid));
   };
 
-  console.log(tasks);
-
   return (
     <div className="max-w-sm mx-auto">
       <div className="p-2 my-2 bg-grey rounded">
