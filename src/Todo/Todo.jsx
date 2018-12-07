@@ -3,7 +3,7 @@ import { Empty, Task } from './helloworld_pb';
 import { GreeterClient } from './helloworld_grpc_web_pb';
 import { v4 as uuid } from 'uuid';
 
-const Tasks = ({ index, task, removeTask }) => {
+const Tasks = ({ task, removeTask }) => {
   return (
     <li
       className={
@@ -16,7 +16,7 @@ const Tasks = ({ index, task, removeTask }) => {
       <div>
         <button
           className="bg-red text-white p-2 px-3 rounded-tr rounded-br"
-          onClick={() => removeTask(index)}
+          onClick={() => removeTask(task.uuid)}
         >
           X
         </button>
@@ -77,9 +77,8 @@ const Todo = () => {
     if (error) {
       setError(false);
     }
-    const time = new Date().getTime() / 1000;
 
-    const newTasks = [...tasks, { uuid, message, time, pending: true }];
+    const newTasks = [...tasks, { uuid, message, pending: true }];
     setTasks(newTasks);
 
     const request = new Task();
@@ -107,27 +106,18 @@ const Todo = () => {
     });
   };
 
-  const removeTask = index => {
-    const newTasks = [...tasks];
-    newTasks.splice(index, 1);
-    setTasks(newTasks);
+  const removeTask = uuid => {
+    setTasks(currentTasks => currentTasks.filter(task => task.uuid !== uuid));
   };
 
-  const sortedTasks = [].concat(tasks).sort((a, b) => {
-    return a.time - b.time;
-  });
+  console.log(tasks);
 
   return (
     <div className="max-w-sm mx-auto">
       <div className="p-2 my-2 bg-grey rounded">
         <ul className="list-reset">
-          {sortedTasks.map((task, index) => (
-            <Tasks
-              key={task.uuid}
-              index={index}
-              task={task}
-              removeTask={removeTask}
-            />
+          {tasks.map(task => (
+            <Tasks key={task.uuid} task={task} removeTask={removeTask} />
           ))}
         </ul>
         <TodoForm addTask={addTask} />
