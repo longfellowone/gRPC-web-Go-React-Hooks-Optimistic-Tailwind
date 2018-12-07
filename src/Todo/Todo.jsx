@@ -4,14 +4,10 @@ import { GreeterClient } from './helloworld_grpc_web_pb';
 import { v4 as uuid } from 'uuid';
 
 const Tasks = ({ task, removeTask }) => {
+  let isPending = 'flex justify-between bg-grey-light mb-2 rounded';
+  if (task.pending) isPending += ' text-grey-dark';
   return (
-    <li
-      className={
-        task.pending
-          ? 'flex justify-between bg-grey-light mb-2 rounded text-grey-dark'
-          : 'flex justify-between bg-grey-light mb-2 rounded'
-      }
-    >
+    <li className={isPending}>
       <div className="p-2">{task.message}</div>
       <div>
         <button
@@ -68,8 +64,7 @@ const Todo = () => {
       }
 
       response = response.toObject().tasksList.map(task => task);
-      const savedTasks = [...tasks, ...response];
-      setTasks(savedTasks);
+      setTasks([...tasks, ...response]);
     });
   }, []);
 
@@ -78,8 +73,7 @@ const Todo = () => {
       setError(false);
     }
 
-    const newTasks = [...tasks, { uuid, message, pending: true }];
-    setTasks(newTasks);
+    setTasks([...tasks, { uuid, message, pending: true }]);
 
     const request = new Task();
     request.setUuid(uuid);
