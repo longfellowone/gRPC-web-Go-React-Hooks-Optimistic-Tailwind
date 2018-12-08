@@ -23,9 +23,9 @@ type server struct {
 func main() {
 
 	data := []*pb.Task{
-		{Message: "testing1", Uuid: "5355507d-84e1-49dd-8200-7f64d8744698"},
-		{Message: "testing2", Uuid: "9c8b613d-f2ff-453c-a522-217de81ccdf9"},
-		{Message: "testing3", Uuid: "e4cda2ea-5c95-4dde-b3b7-706f746f598e"},
+		{Message: "Default item 1", Uuid: "5355507d-84e1-49dd-8200-7f64d8744698"},
+		{Message: "Default item 2", Uuid: "9c8b613d-f2ff-453c-a522-217de81ccdf9"},
+		{Message: "Default item 3", Uuid: "e4cda2ea-5c95-4dde-b3b7-706f746f598e"},
 	}
 
 	lis, err := net.Listen("tcp", port)
@@ -49,7 +49,6 @@ func main() {
 func (s *server) ListTasks(ctx context.Context, in *pb.Empty) (*pb.TaskResponse, error) {
 
 	fmt.Println("New Request: ListTasks")
-	//time.Sleep(1 * time.Second)
 	fmt.Println("ListTasks: Complete!")
 
 	return &pb.TaskResponse{Tasks: s.data}, nil
@@ -57,14 +56,12 @@ func (s *server) ListTasks(ctx context.Context, in *pb.Empty) (*pb.TaskResponse,
 
 func (s *server) NewTask(ctx context.Context, in *pb.Task) (*pb.Empty, error) {
 
-	fmt.Println("New Request: NewTask")
+	fmt.Println("NewTask Request:", in)
 
 	time.Sleep(3 * time.Second)
 
 	data := []*pb.Task{
 		{Message: in.Message, Uuid: in.Uuid},
-		//{Message: "testing5", Id: 5},
-		//{Message: "testing6", Id: 6},
 	}
 	s.data = append(s.data, data...)
 

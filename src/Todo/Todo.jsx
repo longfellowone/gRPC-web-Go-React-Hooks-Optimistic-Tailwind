@@ -52,6 +52,7 @@ const Todo = () => {
     if (error) {
       setError(false);
     }
+
     setTasks([...tasks, { uuid, message, pending: true }]);
 
     const request = new Task();
@@ -65,6 +66,7 @@ const Todo = () => {
 
         removeTaskFromState(uuid);
       }
+
       removePending(uuid);
     });
   }
