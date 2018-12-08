@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Empty, Task, RemoveTaskRequest } from './proto/todo_pb';
+import { TodoForm } from './TodoForm';
+import { TodoList } from './TodoList';
 import { TodoClient } from './proto/todo_grpc_web_pb';
-import { v4 as uuid } from 'uuid';
+import { Empty, Task, RemoveTaskRequest } from './proto/todo_pb';
 
-const Todo = () => {
+export const Todo = () => {
   const [tasks, setTasks] = useState([]);
   const [error, setError] = useState(false);
   const taskRef = useRef();
@@ -24,7 +25,7 @@ const Todo = () => {
       <div className="p-2 my-2 bg-grey rounded">
         <ul className="list-reset">
           {tasks.map(task => (
-            <Tasks key={task.uuid} task={task} removeTask={removeTask} />
+            <TodoList key={task.uuid} task={task} removeTask={removeTask} />
           ))}
         </ul>
         <TodoForm addTask={addTask} taskRef={taskRef} />
@@ -107,43 +108,3 @@ const Todo = () => {
     );
   }
 };
-
-const Tasks = ({ task, removeTask }) => {
-  let checkPending = 'flex justify-between bg-grey-light mb-2 rounded';
-  if (task.pending) checkPending += ' text-grey-dark';
-  return (
-    <li className={checkPending}>
-      <div className="p-2">{task.message}</div>
-      <div>
-        <button
-          className="bg-red text-white p-2 px-3 rounded-tr rounded-br"
-          onClick={() => removeTask(task.uuid)}
-        >
-          X
-        </button>
-      </div>
-    </li>
-  );
-};
-
-const TodoForm = ({ addTask, taskRef }) => {
-  const handleSumbit = e => {
-    e.preventDefault();
-    const message = taskRef.current.value;
-    if (!message) return;
-    addTask(uuid(), message);
-    taskRef.current.value = null;
-  };
-
-  return (
-    <form onSubmit={handleSumbit}>
-      <input
-        className="w-full bg-grey-light rounded p-2"
-        placeholder="Add new task..."
-        ref={taskRef}
-      />
-    </form>
-  );
-};
-
-export default Todo;
