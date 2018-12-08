@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Empty, Task } from './proto/todo_pb';
+import { Empty, Task, RemoveTaskRequest } from './proto/todo_pb';
 import { TodoClient } from './proto/todo_grpc_web_pb';
 import { v4 as uuid } from 'uuid';
 
@@ -70,7 +70,17 @@ const Todo = () => {
   }
 
   function removeTask(uuid) {
-    removeTaskFromState(uuid);
+    const request = new RemoveTaskRequest();
+    request.setUuid(uuid);
+
+    client.removeTask(request, {}, err => {
+      if (err) {
+        setError(true);
+        console.log(err);
+        return;
+      }
+      removeTaskFromState(uuid);
+    });
   }
 
   function removeTaskFromState(uuid) {
