@@ -58,7 +58,7 @@ func (s *server) NewTask(ctx context.Context, in *pb.Task) (*pb.Empty, error) {
 
 	fmt.Println("NewTask Request:", in)
 
-	time.Sleep(3 * time.Second)
+	time.Sleep(1 * time.Second)
 
 	data := []*pb.Task{
 		{Message: in.Message, Uuid: in.Uuid},
