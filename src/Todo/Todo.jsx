@@ -44,6 +44,14 @@ const Todo = () => {
         return console.log(err);
       }
       // response.getTasksList().map(task => task.toObject())
+
+      // response.getTasksList().map(task => {
+      //   return {
+      //     uuid: task.getUuid(),
+      //     message: task.getMessage(),
+      //   };
+      // });
+
       setTasks([...tasks, ...response.toObject().tasksList.map(task => task)]);
     });
   }
