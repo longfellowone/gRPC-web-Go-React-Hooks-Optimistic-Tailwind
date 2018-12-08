@@ -5,11 +5,12 @@ package main
 import (
 	"context"
 	"fmt"
-	"google.golang.org/grpc"
 	"log"
 	"net"
 	"time"
 	pb "todo/proto"
+
+	"google.golang.org/grpc"
 )
 
 const (
@@ -58,11 +59,12 @@ func (s *server) NewTask(ctx context.Context, in *pb.Task) (*pb.Empty, error) {
 
 	fmt.Println("NewTask Request:", in)
 
-	time.Sleep(1 * time.Second)
+	time.Sleep(1 * time.Second) // To simulate a delayed response
 
 	data := []*pb.Task{
 		{Message: in.Message, Uuid: in.Uuid},
 	}
+
 	s.data = append(s.data, data...)
 
 	fmt.Println("NewTask Response:", data)
