@@ -3,50 +3,6 @@ import { Empty, Task } from './helloworld_pb';
 import { GreeterClient } from './helloworld_grpc_web_pb';
 import { v4 as uuid } from 'uuid';
 
-<<<<<<< HEAD
-const Tasks = ({ task, removeTask }) => {
-  let isPending = 'flex justify-between bg-grey-light mb-2 rounded';
-  if (task.pending) isPending += ' text-grey-dark';
-  return (
-    <li className={isPending}>
-      <div className="p-2">{task.message}</div>
-      <div>
-        <button
-          className="bg-red text-white p-2 px-3 rounded-tr rounded-br"
-          onClick={() => removeTask(task.uuid)}
-        >
-          X
-        </button>
-      </div>
-    </li>
-  );
-};
-
-const TodoForm = ({ addTask }) => {
-  const [input, setInput] = useState('');
-
-  const handleSumbit = e => {
-    e.preventDefault();
-    if (!input) return;
-    addTask(uuid(), input);
-    setInput('');
-    return;
-  };
-
-  return (
-    <form onSubmit={handleSumbit}>
-      <input
-        className="w-full bg-grey-light rounded p-2"
-        placeholder="Add new task..."
-        value={input}
-        onChange={e => setInput(e.target.value)}
-      />
-    </form>
-  );
-};
-
-=======
->>>>>>> testing
 const Todo = () => {
   const [tasks, setTasks] = useState([]);
   const [error, setError] = useState(false);
@@ -63,6 +19,22 @@ const Todo = () => {
     getTasks();
   }, []);
 
+  return (
+    <div className="max-w-sm mx-auto">
+      <div className="p-2 my-2 bg-grey rounded">
+        <ul className="list-reset">
+          {tasks.map(task => (
+            <Tasks key={task.uuid} task={task} removeTask={removeTask} />
+          ))}
+        </ul>
+        <TodoForm addTask={addTask} taskRef={taskRef} />
+        {error && (
+          <div className="mt-3 px-1">Error: Can't connect to server</div>
+        )}
+      </div>
+    </div>
+  );
+
   function getTasks() {
     const request = new Empty();
 
@@ -72,8 +44,7 @@ const Todo = () => {
         return console.log(err);
       }
 
-      response = response.toObject().tasksList.map(task => task);
-      setTasks([...tasks, ...response]);
+      setTasks([...tasks, ...response.toObject().tasksList.map(task => task)]);
     });
   }
 
@@ -81,10 +52,6 @@ const Todo = () => {
     if (error) {
       setError(false);
     }
-<<<<<<< HEAD
-
-=======
->>>>>>> testing
     setTasks([...tasks, { uuid, message, pending: true }]);
 
     const request = new Task();
@@ -106,6 +73,10 @@ const Todo = () => {
     removeTaskFromState(uuid);
   }
 
+  function removeTaskFromState(uuid) {
+    setTasks(currentTasks => currentTasks.filter(task => task.uuid !== uuid));
+  }
+
   function removePending(uuid) {
     setTasks(currentTasks =>
       currentTasks.map(task => {
@@ -116,33 +87,13 @@ const Todo = () => {
       }),
     );
   }
-
-  function removeTaskFromState(uuid) {
-    setTasks(currentTasks => currentTasks.filter(task => task.uuid !== uuid));
-  }
-
-  return (
-    <div className="max-w-sm mx-auto">
-      <div className="p-2 my-2 bg-grey rounded">
-        <ul className="list-reset">
-          {tasks.map(task => (
-            <Tasks key={task.uuid} task={task} removeTask={removeTask} />
-          ))}
-        </ul>
-        <TodoForm addTask={addTask} taskRef={taskRef} />
-        {error && (
-          <div className="mt-3 px-1">Error: Can't connect to database</div>
-        )}
-      </div>
-    </div>
-  );
 };
 
 const Tasks = ({ task, removeTask }) => {
-  let isPending = 'flex justify-between bg-grey-light mb-2 rounded';
-  if (task.pending) isPending += ' text-grey-dark';
+  let checkPending = 'flex justify-between bg-grey-light mb-2 rounded';
+  if (task.pending) checkPending += ' text-grey-dark';
   return (
-    <li className={isPending}>
+    <li className={checkPending}>
       <div className="p-2">{task.message}</div>
       <div>
         <button
@@ -158,8 +109,8 @@ const Tasks = ({ task, removeTask }) => {
 
 const TodoForm = ({ addTask, taskRef }) => {
   const handleSumbit = e => {
-    const message = taskRef.current.value;
     e.preventDefault();
+    const message = taskRef.current.value;
     if (!message) return;
     addTask(uuid(), message);
     taskRef.current.value = null;
