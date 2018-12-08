@@ -19,10 +19,6 @@ message TaskResponse {
   repeated Task tasks = 1;
 }
 
-message NewTaskResponse {
-  bool success = 1;
-}
-
 message RemoveTaskRequest {
   string uuid = 1;
 }

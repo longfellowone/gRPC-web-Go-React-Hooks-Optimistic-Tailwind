@@ -43,7 +43,7 @@ const Todo = () => {
         setError(true);
         return console.log(err);
       }
-
+      // response.getTasksList().map(task => task.toObject())
       setTasks([...tasks, ...response.toObject().tasksList.map(task => task)]);
     });
   }
@@ -64,6 +64,7 @@ const Todo = () => {
         setError(true);
         console.log(err);
         removeTaskFromState(uuid);
+        return;
       }
       removePending(uuid);
     });
