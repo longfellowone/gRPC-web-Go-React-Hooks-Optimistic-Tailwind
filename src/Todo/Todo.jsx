@@ -51,7 +51,7 @@ export const Todo = () => {
       //     uuid: task.getUuid(),
       //     message: task.getMessage(),
       //   };
-      // });
+      // })
 
       setTasks([...tasks, ...response.toObject().tasksList.map(task => task)]);
     });

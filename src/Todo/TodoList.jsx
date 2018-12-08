@@ -8,6 +8,7 @@ export const TodoList = ({ task, removeTask }) => {
       <div className="p-2">{task.message}</div>
       <div>
         <button
+          disabled={task.pending}
           className="bg-red text-white p-2 px-3 rounded-tr rounded-br"
           onClick={() => removeTask(task.uuid)}
         >

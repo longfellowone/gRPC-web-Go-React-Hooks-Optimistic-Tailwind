@@ -83,7 +83,7 @@ func (s *server) RemoveTask(ctx context.Context, in *pb.RemoveTaskRequest) (*pb.
 		}
 	}
 
-	fmt.Println("Deleted task UUID: ", in.Uuid)
+	fmt.Printf("Deleted task: uuid:\"%v\"\n", in.Uuid)
 
 	return &pb.Empty{}, nil
 }
