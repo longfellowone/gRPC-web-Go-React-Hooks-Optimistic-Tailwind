@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Empty, Task } from './helloworld_pb';
 import { GreeterClient } from './helloworld_grpc_web_pb';
 import { v4 as uuid } from 'uuid';
 
+<<<<<<< HEAD
 const Tasks = ({ task, removeTask }) => {
   let isPending = 'flex justify-between bg-grey-light mb-2 rounded';
   if (task.pending) isPending += ' text-grey-dark';
@@ -44,9 +45,12 @@ const TodoForm = ({ addTask }) => {
   );
 };
 
+=======
+>>>>>>> testing
 const Todo = () => {
   const [tasks, setTasks] = useState([]);
   const [error, setError] = useState(false);
+  const taskRef = useRef();
 
   const client = new GreeterClient(
     'http://' + window.location.hostname + ':8080',
@@ -55,6 +59,11 @@ const Todo = () => {
   );
 
   useEffect(() => {
+    taskRef.current.focus();
+    getTasks();
+  }, []);
+
+  function getTasks() {
     const request = new Empty();
 
     client.listTasks(request, {}, (err, response) => {
@@ -66,13 +75,16 @@ const Todo = () => {
       response = response.toObject().tasksList.map(task => task);
       setTasks([...tasks, ...response]);
     });
-  }, []);
+  }
 
-  const addTask = (uuid, message) => {
+  function addTask(uuid, message) {
     if (error) {
       setError(false);
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> testing
     setTasks([...tasks, { uuid, message, pending: true }]);
 
     const request = new Task();
@@ -80,29 +92,34 @@ const Todo = () => {
     request.setMessage(message);
 
     client.newTask(request, {}, err => {
-      setTasks(currentTasks =>
-        currentTasks.map(task => {
-          if (task.uuid === uuid) {
-            delete task.pending;
-          }
-          return task;
-        }),
-      );
-
       if (err) {
         setError(true);
         console.log(err);
 
-        setTasks(currentTasks =>
-          currentTasks.filter(task => task.uuid !== uuid),
-        );
+        removeTaskFromState(uuid);
       }
+      removePending(uuid);
     });
-  };
+  }
 
-  const removeTask = uuid => {
+  function removeTask(uuid) {
+    removeTaskFromState(uuid);
+  }
+
+  function removePending(uuid) {
+    setTasks(currentTasks =>
+      currentTasks.map(task => {
+        if (task.uuid === uuid) {
+          delete task.pending;
+        }
+        return task;
+      }),
+    );
+  }
+
+  function removeTaskFromState(uuid) {
     setTasks(currentTasks => currentTasks.filter(task => task.uuid !== uuid));
-  };
+  }
 
   return (
     <div className="max-w-sm mx-auto">
@@ -112,12 +129,50 @@ const Todo = () => {
             <Tasks key={task.uuid} task={task} removeTask={removeTask} />
           ))}
         </ul>
-        <TodoForm addTask={addTask} />
+        <TodoForm addTask={addTask} taskRef={taskRef} />
         {error && (
           <div className="mt-3 px-1">Error: Can't connect to database</div>
         )}
       </div>
     </div>
+  );
+};
+
+const Tasks = ({ task, removeTask }) => {
+  let isPending = 'flex justify-between bg-grey-light mb-2 rounded';
+  if (task.pending) isPending += ' text-grey-dark';
+  return (
+    <li className={isPending}>
+      <div className="p-2">{task.message}</div>
+      <div>
+        <button
+          className="bg-red text-white p-2 px-3 rounded-tr rounded-br"
+          onClick={() => removeTask(task.uuid)}
+        >
+          X
+        </button>
+      </div>
+    </li>
+  );
+};
+
+const TodoForm = ({ addTask, taskRef }) => {
+  const handleSumbit = e => {
+    const message = taskRef.current.value;
+    e.preventDefault();
+    if (!message) return;
+    addTask(uuid(), message);
+    taskRef.current.value = null;
+  };
+
+  return (
+    <form onSubmit={handleSumbit}>
+      <input
+        className="w-full bg-grey-light rounded p-2"
+        placeholder="Add new task..."
+        ref={taskRef}
+      />
+    </form>
   );
 };
 
