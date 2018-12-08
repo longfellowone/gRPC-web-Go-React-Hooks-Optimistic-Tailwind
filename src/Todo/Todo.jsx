@@ -63,10 +63,8 @@ const Todo = () => {
       if (err) {
         setError(true);
         console.log(err);
-
         removeTaskFromState(uuid);
       }
-
       removePending(uuid);
     });
   }
