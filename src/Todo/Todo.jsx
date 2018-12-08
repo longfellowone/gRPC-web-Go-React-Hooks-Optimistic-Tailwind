@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Empty, Task } from './helloworld_pb';
-import { GreeterClient } from './helloworld_grpc_web_pb';
+import { Empty, Task } from './proto/todo_pb';
+import { TodoClient } from './proto/todo_grpc_web_pb';
 import { v4 as uuid } from 'uuid';
 
 const Todo = () => {
@@ -8,7 +8,7 @@ const Todo = () => {
   const [error, setError] = useState(false);
   const taskRef = useRef();
 
-  const client = new GreeterClient(
+  const client = new TodoClient(
     'http://' + window.location.hostname + ':8080',
     null,
     null,

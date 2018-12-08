@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package Todo;
+
+service Todo {
+  rpc ListTasks (Empty) returns (TaskResponse) {}
+  rpc NewTask (Task) returns (Empty) {}
+  rpc RemoveTask (RemoveTaskRequest) returns (Empty) {}
+}
+
+message Empty {}
+
+message Task {
+  string uuid = 1;
+  string message = 2;
+}
+
+message TaskResponse {
+  repeated Task tasks = 1;
+}
+
+message NewTaskResponse {
+  bool success = 1;
+}
+
+message RemoveTaskRequest {
+  string uuid = 1;
+}
+
+/* eslint-disable */
+
+/** Generate JS Todo proto
+ protoc -I=. ./proto/todo.proto \
+  --js_out=import_style=commonjs:./src/Todo \
+  --grpc-web_out=import_style=commonjs,mode=grpcwebtext:./src/Todo
+ */
